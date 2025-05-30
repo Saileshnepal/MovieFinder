@@ -1,0 +1,70 @@
+/* Custom styles for MovieFinder */
+:where([class^="ri-"])::before { 
+    content: "\f3c2"; 
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+.search-input:focus {
+    box-shadow: 0 0 0 2px rgba(82, 113, 255, 0.2);
+}
+
+.movie-card:hover .movie-overlay {
+    opacity: 1;
+}
+
+.genre-pill:hover {
+    background-color: rgba(82, 113, 255, 0.1);
+    color: #5271ff;
+}
+
+.genre-pill.active {
+    background-color: #5271ff;
+    color: white;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.movie-card {
+    transition: transform 0.3s ease;
+}
+
+.movie-card:hover {
+    transform: translateY(-5px);
+}
+
+.back-to-top {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+}
+
+.back-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.movie-overlay {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal.show {
+    opacity: 1;
+    visibility: visible;
+}

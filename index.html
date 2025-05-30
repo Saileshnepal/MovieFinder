@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MovieFinder - Discover Your Next Favorite Film</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>tailwind.config={theme:{extend:{colors:{primary:'#5271ff',secondary:'#ff5757'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white shadow-sm">
+        <div class="container mx-auto px-4 py-4 flex items-center justify-between">
+            <a href="#" class="text-2xl font-['Pacifico'] text-primary">MovieFinder</a>
+            
+            <div class="relative w-full max-w-2xl mx-4">
+                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                    <div class="w-5 h-5 flex items-center justify-center text-gray-400">
+                        <i class="ri-search-line"></i>
+                    </div>
+                </div>
+                <input type="text" class="search-input w-full py-3 pl-10 pr-4 bg-gray-100 border-none rounded-full text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all" placeholder="Search for movies, actors, directors...">
+                <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                    <div class="w-5 h-5 flex items-center justify-center text-gray-400 cursor-pointer hover:text-primary transition-colors">
+                        <i class="ri-close-line"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <button class="hidden md:flex items-center space-x-1 text-sm font-medium text-gray-700 hover:text-primary transition-colors !rounded-button">
+                    <div class="w-5 h-5 flex items-center justify-center">
+                        <i class="ri-bookmark-line"></i>
+                    </div>
+                    <span class="whitespace-nowrap">Watchlist</span>
+                </button>
+                <button class="flex items-center space-x-1 text-sm font-medium text-gray-700 hover:text-primary transition-colors !rounded-button">
+                    <div class="w-5 h-5 flex items-center justify-center">
+                        <i class="ri-user-line"></i>
+                    </div>
+                    <span class="hidden md:inline whitespace-nowrap">Sign In</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Genre Filter Bar -->
+    <div class="bg-white border-b border-gray-200 py-3 sticky top-[72px] z-40">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between">
+                <div class="overflow-x-auto scrollbar-hide flex-1 -mx-1">
+                    <div class="flex space-x-2 py-1">
+                        <button class="genre-pill active px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors !rounded-button">All</button>
+                        <button class="genre-pill px-4 py-2 rounded-full text-sm font-medium text-gray-700 whitespace-nowrap transition-colors !rounded-button">Action</button>
+                        <button class="genre-pill px-4 py-2 rounded-full text-sm font-medium text-gray-700 whitespace-nowrap transition-colors !rounded-button">Comedy</button>
+                        <button class="genre-pill px-4 py-2 rounded-full text-sm font-medium text-gray-700 whitespace-nowrap transition-colors !rounded-button">Drama</button>
+                        <button class="genre-pill px-4 py-2 rounded-full text-sm font-medium text-gray-700 whitespace-nowrap transition-colors !rounded-button">Thriller</button>
+                        <button class="genre-pill px-4 py-2 rounded-full text-sm font-medium text-gray-700 whitespace-nowrap transition-colors !rounded-button">Sci-Fi</button>
+                        <button class="genre-pill px-4 py-2 rounded-full text-sm font-medium text-gray-700 whitespace-nowrap transition-colors !rounded-button">Horror</button>
+                        <button class="genre-pill px-4 py-2 rounded-full text-sm font-medium text-gray-700 whitespace-nowrap transition-colors !rounded-button">Romance</button>
+                        <button class="genre-pill px-4 py-2 rounded-full text-sm font-medium text-gray-700 whitespace-nowrap transition-colors !rounded-button">Animation</button>
+                    </div>
+                </div>
+                
+                <div class="ml-4 flex items-center">
+                    <div class="relative">
+                        <button id="yearFilterBtn" class="flex items-center space-x-1 px-4 py-2 bg-white border border-gray-300 rounded-full text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors !rounded-button">
+                            <span class="whitespace-nowrap">Year: All</span>
+                            <div class="w-4 h-4 flex items-center justify-center">
+                                <i class="ri-arrow-down-s-line"></i>
+                            </div>
+                        </button>
+                        <div id="yearDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                            <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">All Years</button>
+                            <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">2025</button>
+                            <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">2024</button>
+                            <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">2023</button>
+                            <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">2022</button>
+                            <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">2021</button>
+                            <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">2020</button>
+                            <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">Before 2020</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Trending Section -->
+        <div class="mb-12">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold text-gray-900">Trending Movies</h2>
+                <button class="text-primary font-medium text-sm hover:underline !rounded-button">View All</button>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <!-- Movie Card 1 -->
+                <div class="movie-card bg-white rounded-lg shadow-sm overflow-hidden">
+                    <div class="relative">
+                        <img src="https://readdy.ai/api/search-image?query=movie%20poster%20for%20sci-fi%20film%20with%20futuristic%20cityscape%2C%20neon%20lights%2C%20dramatic%20lighting%2C%20professional%20cinematic%20quality%2C%20high%20resolution%20movie%20poster%2C%20vibrant%20colors%2C%20dramatic%20composition&width=500&height=750&seq=1&orientation=portrait" alt="Quantum Horizon" class="w-full h-64 object-cover object-top">
+                        <div class="movie-overlay absolute inset-0 bg-black bg-opacity-60 flex flex-col justify-end p-4">
+                            <button class="preview-btn bg-white text-gray-900 font-medium py-2 rounded-full mb-3 hover:bg-primary hover:text-white transition-colors !rounded-button">
+                                <span class="whitespace-nowrap">Quick Preview</span>
+                            </button>
+                            <button class="bg-primary bg-opacity-90 text-white font-medium py-2 rounded-full hover:bg-opacity-100 transition-colors !rounded-button">
+                                <span class="whitespace-nowrap">See Details</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-1">
+                            <h3 class="font-semibold text-gray-900 truncate">Quantum Horizon</h3>
+                            <div class="flex items-center">
+                                <div class="w-4 h-4 flex items-center justify-center text-yellow-400">
+                                    <i class="ri-star-fill"></i>
+                                </div>
+                                <span class="text-sm font-medium ml-1">4.8</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-sm text-gray-500">
+                            <span>2025</span>
+                            <span class="mx-2">•</span>
+                            <span>Sci-Fi</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Movie Card 2 -->
+                <div class="movie-card bg-white rounded-lg shadow-sm overflow-hidden">
+                    <div class="relative">
+                        <img src="https://readdy.ai/api/search-image?query=movie%20poster%20for%20action%20thriller%20with%20dark%20urban%20setting%2C%20rain%2C%20dramatic%20lighting%2C%20professional%20cinematic%20quality%2C%20high%20resolution%20movie%20poster%2C%20intense%20atmosphere%2C%20gritty%20aesthetic&width=500&height=750&seq=2&orientation=portrait" alt="Midnight Protocol" class="w-full h-64 object-cover object-top">
+                        <div class="movie-overlay absolute inset-0 bg-black bg-opacity-60 flex flex-col justify-end p-4">
+                            <button class="preview-btn bg-white text-gray-900 font-medium py-2 rounded-full mb-3 hover:bg-primary hover:text-white transition-colors !rounded-button">
+                                <span class="whitespace-nowrap">Quick Preview</span>
+                            </button>
+                            <button class="bg-primary bg-opacity-90 text-white font-medium py-2 rounded-full hover:bg-opacity-100 transition-colors !rounded-button">
+                                <span class="whitespace-nowrap">See Details</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-1">
+                            <h3 class="font-semibold text-gray-900 truncate">Midnight Protocol</h3>
+                            <div class="flex items-center">
+                                <div class="w-4 h-4 flex items-center justify-center text-yellow-400">
+                                    <i class="ri-star-fill"></i>
+                                </div>
+                                <span class="text-sm font-medium ml-1">4.6</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-sm text-gray-500">
+                            <span>2025</span>
+                            <span class="mx-2">•</span>
+                            <span>Action, Thriller</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Movie Card 3 -->
+                <div class="movie-card bg-white rounded-lg shadow-sm overflow-hidden">
+                    <div class="relative">
+                        <img src="https://readdy.ai/api/search-image?query=movie%20poster%20for%20romantic%20comedy%20with%20bright%20colors%2C%20summer%20setting%2C%20beach%2C%20professional%20cinematic%20quality%2C%20high%20resolution%20movie%20poster%2C%20light%20hearted%2C%20warm%20tones%2C%20charming%20composition&width=500&height=750&seq=3&orientation=portrait" alt="Summer Serendipity" class="w-full h-64 object-cover object-top">
+                        <div class="movie-overlay absolute inset-0 bg-black bg-opacity-60 flex flex-col justify-end p-4">
+                            <button class="preview-btn bg-white text-gray-900 font-medium py-2 rounded-full mb-3 hover:bg-primary hover:text-white transition-colors !rounded-button">
+                                <span class="whitespace-nowrap">Quick Preview</span>
+                            </button>
+                            <button class="bg-primary bg-opacity-90 text-white font-medium py-2 rounded-full hover:bg-opacity-100 transition-colors !rounded-button">
+                                <span class="whitespace-nowrap">See Details</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-1">
+                            <h3 class="font-semibold text-gray-900 truncate">Summer Serendipity</h3>
+                            <div class="flex items-center">
+                                <div class="w-4 h-4 flex items-center justify-center text-yellow-400">
+                                    <i class="ri-star-fill"></i>
+                                </div>
+                                <span class="text-sm font-medium ml-1">4.5</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-sm text-gray-500">
+                            <span>2025</span>
+                            <span class="mx-2">•</span>
+                            <span>Romance, Comedy</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Movie Card 4 -->
+                <div class="movie-card bg-white rounded-lg shadow-sm overflow-hidden">
+                    <div class="relative">
+                        <img src="https://readdy.ai/api/search-image?query=movie%20poster%20for%20psychological%20horror%20with%20dark%20mansion%2C%20fog%2C%20moonlight%2C%20professional%20cinematic%20quality%2C%20high%20resolution%20movie%20poster%2C%20eerie%20atmosphere%2C%20haunting%20imagery%2C%20suspenseful%20composition&width=500&height=750&seq=4&orientation=portrait" alt="Whispers in Shadow" class="w-full h-64 object-cover object-top">
+                        <div class="movie-overlay absolute inset-0 bg-black bg-opacity-60 flex flex-col justify-end p-4">
+                            <button class="preview-btn bg-white text-gray-900 font-medium py-2 rounded-full mb-3 hover:bg-primary hover:text-white transition-colors !rounded-button">
+                                <span class="whitespace-nowrap">Quick Preview</span>
+                            </button>
+                            <button class="bg-primary bg-opacity-90 text-white font-medium py-2 rounded-full hover:bg-opacity-100 transition-colors !rounded-button">
+                                <span class="whitespace-nowrap">See Details</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-1">
+                            <h3 class="font-semibold text-gray-900 truncate">Whispers in Shadow</h3>
+                            <div class="flex items-center">
+                                <div class="w-4 h-4 flex items-center justify-center text-yellow-400">
+                                    <i class="ri-star-fill"></i>
+                                </div>
+                                <span class="text-sm font-medium ml-1">4.7</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-sm text-gray-500">
+                            <span>2024</span>
+                            <span class="mx-2">•</span>
+                            <span>Horror, Thriller</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- New Releases Section -->
+        <div class="mb-12">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold text-gray-900">New Releases</h2>
+                <button class="text-primary font-medium text-sm hover:underline !rounded-button">View All</button>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <!-- Movie Card 5 -->
+                <div class="movie-card bg-white rounded-lg shadow-sm overflow-hidden">
+                    <div class="relative">
+                        <img src="https://readdy.ai/api/search-image?query=movie%20poster%20for%20historical%20drama%20with%20period%20costumes%2C%20grand%20palace%2C%20professional%20cinematic%20quality%2C%20high%20resolution%20movie%20poster%2C%20rich%20colors%2C%20elegant%2C%20composition%2C%20dramatic%20lighting&width=500&height=750&seq=5&orientation=portrait" alt="Crown of Destiny" class="w-full h-64 object-cover object-top">
+                        <div class="movie-overlay absolute inset-0 bg-black bg-opacity-60 flex flex-col justify-end p-4">
+                            <button class="preview-btn bg-white text-gray-900 font-medium py-2 rounded-full mb-3 hover:bg-primary hover:text-white transition-colors !rounded-button">
+                                <span class="whitespace-nowrap">Quick Preview</span>
+                            </button>
+                            <button class="bg-primary bg-opacity-90 text-white font-medium py-2 rounded-full hover:bg-opacity-100 transition-colors !rounded-button">
+                                <span class="whitespace-nowrap">See Details</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-1">
+                            <h3 class="font-semibold text-gray-900 truncate">Crown of Destiny</h3>
+                            <div class="flex items-center">
+                                <div class="w-4 h-4 flex items-center justify-center text-yellow-400">
+                                    <i class="ri-star-fill"></i>
+                                </div>
+                                <span class="text-sm font-medium ml-1">4.9</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-sm text-gray-500">
+                            <span>2025</span>
+                            <span class="mx-2">•</span>
+                            <span>Drama, History</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Movie Card 6 -->
+                <div class="movie-card bg-white rounded-lg shadow-sm overflow-hidden">
+                    <div class="relative">
+                        <img src="https://readdy.ai/api/search-image?query=movie%20poster%20for%20animated%20family%20adventure%20with%20colorful%20fantasy%20world%2C%20magical%20creatures%2C%20professional%20cinematic%20quality%2C%20high%20resolution%20movie%20poster%2C%20vibrant%20colors%2C%20whimsical%20style%2C%20enchanting%20scene&width=500&height=750&seq=6&orientation=portrait" alt="Dreamweavers" class="w-full h-64 object-cover object-top">
+                        <div class="movie-overlay absolute inset-0 bg-black bg-opacity-60 flex flex-col justify-end p-4">
+                            <button class="preview-btn bg-white text-gray-900 font-medium py-2 rounded-full mb-3 hover:bg-primary hover:text-white transition-colors !rounded-button">
+                                <span class="whitespace-nowrap">Quick Preview</span>
+                            </button>
+                            <button class="bg-primary bg-opacity-90 text-white font-medium py-2 rounded-full hover:bg-opacity-100 transition-colors !rounded-button">
+                                <span class="whitespace-nowrap">See Details</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-1">
+                            <h3 class="font-semibold text-gray-900 truncate">Dreamweavers</h3>
+                            <div class="flex items-center">
+                                <div class="w-4 h-4 flex items-center justify-center text-yellow-400">
+                                    <i class="ri-star-fill"></i>
+                                </div>
+                                <span class="text-sm font-medium ml-1">4.7</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-sm text-gray-500">
+                            <span>2025</span>
+                            <span class="mx-2">•</span>
+                            <span>Animation, Family</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Movie Card 7 -->
+                <div class="movie-card bg-white rounded-lg shadow-sm overflow-hidden">
+                    <div class="relative">
+                        <img src="https://readdy.ai/api/search-image?query=movie%20poster%20for%20crime%20drama%20with%20detective%2C%20noir%20style%2C%20rainy%20city%20streets%2C%20professional%20cinematic%20quality%2C%20high%20resolution%20movie%20poster%2C%20moody%20atmosphere%2C%20dramatic%20shadows%2C%20tense%20composition&width=500&height=750&seq=7&orientation=portrait" alt="The Last Detective" class="w-full h-64 object-cover object-top">
+                        <div class="movie-overlay absolute inset-0 bg-black bg-opacity-60 flex flex-col justify-end p-4">
+                            <button class="preview-btn bg-white text-gray-900 font-medium py-2 rounded-full mb-3 hover:bg-primary hover:text-white transition-colors !rounded-button">
+                                <span class="whitespace-nowrap">Quick Preview</span>
+                            </button>
+                            <button class="bg-primary bg-opacity-90 text-white font-medium py-2 rounded-full hover:bg-opacity-100 transition-colors !rounded-button">
+                                <span class="whitespace-nowrap">See Details</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-1">
+                            <h3 class="font-semibold text-gray-900 truncate">The Last Detective</h3>
+                            <div class="flex items-center">
+                                <div class="w-4 h-4 flex items-center justify-center text-yellow-400">
+                                    <i class="ri-star-fill"></i>
+                                </div>
+                                <span class="text-sm font-medium ml-1">4.5</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-sm text-gray-500">
+                            <span>2025</span>
+                            <span class="mx-2">•</span>
+                            <span>Crime, Drama</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Movie Card 8 -->
+                <div class="movie-card bg-white rounded-lg shadow-sm overflow-hidden">
+                    <div class="relative">
+                        <img src="https://readdy.ai/api/search-image?query=movie%20poster%20for%20comedy%20with%20group%20of%20friends%20on%20road%20trip%2C%20sunny%20landscape%2C%20professional%20cinematic%20quality%2C%20high%20resolution%20movie%20poster%2C%20bright%20colors%2C%20fun%20atmosphere%2C%20engaging%20composition&width=500&height=750&seq=8&orientation=portrait" alt="Road Trip Misfits" class="w-full h-64 object-cover object-top">
+                        <div class="movie-overlay absolute inset-0 bg-black bg-opacity-60 flex flex-col justify-end p-4">
+                            <button class="preview-btn bg-white text-gray-900 font-medium py-2 rounded-full mb-3 hover:bg-primary hover:text-white transition-colors !rounded-button">
+                                <span class="whitespace-nowrap">Quick Preview</span>
+                            </button>
+                            <button class="bg-primary bg-opacity-90 text-white font-medium py-2 rounded-full hover:bg-opacity-100 transition-colors !rounded-button">
+                                <span class="whitespace-nowrap">See Details</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-1">
+                            <h3 class="font-semibold text-gray-900 truncate">Road Trip Misfits</h3>
+                            <div class="flex items-center">
+                                <div class="w-4 h-4 flex items-center justify-center text-yellow-400">
+                                    <i class="ri-star-fill"></i>
+                                </div>
+                                <span class="text-sm font-medium ml-1">4.3</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-sm text-gray-500">
+                            <span>2025</span>
+                            <span class="mx-2">•</span>
+                            <span>Comedy, Adventure</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Top Rated Section -->
+        <div>
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold text-gray-900">Top Rated</h2>
+                <button class="text-primary font-medium text-sm hover:underline !rounded-button">View All</button>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <!-- Movie Card 9 -->
+                <div class="movie-card bg-white rounded-lg shadow-sm overflow-hidden">
+                    <div class="relative">
+                        <img src="https://readdy.ai/api/search-image?query=movie%20poster%20for%20epic%20fantasy%20adventure%20with%20medieval%20setting%2C%20dragons%2C%20magic%2C%20professional%20cinematic%20quality%2C%20high%20resolution%20movie%20poster%2C%20epic%20scale%2C%20dramatic%20lighting%2C%20fantasy%20world&width=500&height=750&seq=9&orientation=portrait" alt="Dragon's Realm" class="w-full h-64 object-cover object-top">
+                        <div class="movie-overlay absolute inset-0 bg-black bg-opacity-60 flex flex-col justify-end p-4">
+                            <button class="preview-btn bg-white text-gray-900 font-medium py-2 rounded-full mb-3 hover:bg-primary hover:text-white transition-colors !rounded-button">
+                                <span class="whitespace-nowrap">Quick Preview</span>
+                            </button>
+                            <button class="bg-primary bg-opacity-90 text-white font-medium py-2 rounded-full hover:bg-opacity-100 transition-colors !rounded-button">
+                                <span class="whitespace-nowrap">See Details</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-1">
+                            <h3 class="font-semibold text-gray-900 truncate">Dragon's Realm</h3>
+                            <div class="flex items-center">
+                                <div class="w-4 h-4 flex items-center justify-center text-yellow-400">
+                                    <i class="ri-star-fill"></i>
+                                </div>
+                                <span class="text-sm font-medium ml-1">4.9</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-sm text-gray-500">
+                            <span>2024</span>
+                            <span class="mx-2">•</span>
+                            <span>Fantasy, Adventure</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Movie Card 10 -->
+                <div class="movie-card bg-white rounded-lg shadow-sm overflow-hidden">
+                    <div class="relative">
+                        <img src="https://readdy.ai/api/search-image?query=movie%20poster%20for%20emotional%20drama%20with%20two%20characters%20in%20intimate%20conversation%2C%20soft%20lighting%2C%20professional%20cinematic%20quality%2C%20high%20resolution%20movie%20poster%2C%20emotional%20depth%2C%20subtle%20colors%2C%20poignant%20moment&width=500&height=750&seq=10&orientation=portrait" alt="Whispered Truths" class="w-full h-64 object-cover object-top">
+                        <div class="movie-overlay absolute inset-0 bg-black bg-opacity-60 flex flex-col justify-end p-4">
+                            <button class="preview-btn bg-white text-gray-900 font-medium py-2 rounded-full mb-3 hover:bg-primary hover:text-white transition-colors !rounded-button">
+                                <span class="whitespace-nowrap">Quick Preview</span>
+                            </button>
+                            <button class="bg-primary bg-opacity-90 text-white font-medium py-2 rounded-full hover:bg-opacity-100 transition-colors !rounded-button">
+                                <span class="whitespace-nowrap">See Details</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-1">
+                            <h3 class="font-semibold text-gray-900 truncate">Whispered Truths</h3>
+                            <div class="flex items-center">
+                                <div class="w-4 h-4 flex items-center justify-center text-yellow-400">
+                                    <i class="ri-star-fill"></i>
+                                </div>
+                                <span class="text-sm font-medium ml-1">4.8</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-sm text-gray-500">
+                            <span>2024</span>
+                            <span class="mx-2">•</span>
+                            <span>Drama</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Movie Card 11 -->
+                <div class="movie-card bg-white rounded-lg shadow-sm overflow-hidden">
+                    <div class="relative">
+                        <img src="https://readdy.ai/api/search-image?query=movie%20poster%20for%20space%20opera%20with%20planets%2C%20spaceships%2C%20alien%20worlds%2C%20professional%20cinematic%20quality%2C%20high%20resolution%20movie%20poster%2C%20cosmic%20scale%2C%20spectacular%20visuals%2C%20sci-fi%20aesthetic&width=500&height=750&seq=11&orientation=portrait" alt="Galactic Odyssey" class="w-full h-64 object-cover object-top">
+                        <div class="movie-overlay absolute inset-0 bg-black bg-opacity-60 flex flex-col justify-end p-4">
+                            <button class="preview-btn bg-white text-gray-900 font-medium py-2 rounded-full mb-3 hover:bg-primary hover:text-white transition-colors !rounded-button">
+                                <span class="whitespace-nowrap">Quick Preview</span>
+                            </button>
+                            <button class="bg-primary bg-opacity-90 text-white font-medium py-2 rounded-full hover:bg-opacity-100 transition-colors !rounded-button">
+                                <span class="whitespace-nowrap">See Details</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-1">
+                            <h3 class="font-semibold text-gray-900 truncate">Galactic Odyssey</h3>
+                            <div class="flex items-center">
+                                <div class="w-4 h-4 flex items-center justify-center text-yellow-400">
+                                    <i class="ri-star-fill"></i>
+                                </div>
+                                <span class="text-sm font-medium ml-1">4.7</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-sm text-gray-500">
+                            <span>2024</span>
+                            <span class="mx-2">•</span>
+                            <span>Sci-Fi, Adventure</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Movie Card 12 -->
+                <div class="movie-card bg-white rounded-lg shadow-sm overflow-hidden">
+                    <div class="relative">
+                        <img src="https://readdy.ai/api/search-image?query=movie%20poster%20for%20biographical%20drama%20with%20historical%20figure%2C%20period%20setting%2C%20professional%20cinematic%20quality%2C%20high%20resolution%20movie%20poster%2C%20dignified%20composition%2C%20historical%20accuracy%2C%20dramatic%20lighting&width=500&height=750&seq=12&orientation=portrait" alt="The Visionary" class="w-full h-64 object-cover object-top">
+                        <div class="movie-overlay absolute inset-0 bg-black bg-opacity-60 flex flex-col justify-end p-4">
+                            <button class="preview-btn bg-white text-gray-900 font-medium py-2 rounded-full mb-3 hover:bg-primary hover:text-white transition-colors !rounded-button">
+                                <span class="whitespace-nowrap">Quick Preview</span>
+                            </button>
+                            <button class="bg-primary bg-opacity-90 text-white font-medium py-2 rounded-full hover:bg-opacity-100 transition-colors !rounded-button">
+                                <span class="whitespace-nowrap">See Details</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-1">
+                            <h3 class="font-semibold text-gray-900 truncate">The Visionary</h3>
+                            <div class="flex items-center">
+                                <div class="w-4 h-4 flex items-center justify-center text-yellow-400">
+                                    <i class="ri-star-fill"></i>
+                                </div>
+                                <span class="text-sm font-medium ml-1">4.6</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-sm text-gray-500">
+                            <span>2023</span>
+                            <span class="mx-2">•</span>
+                            <span>Biography, Drama</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Load More Button -->
+        <div class="mt-12 text-center">
+            <button id="loadMoreBtn" class="bg-white border border-gray-300 text-gray-700 font-medium px-6 py-3 rounded-full hover:bg-gray-50 transition-colors !rounded-button">
+                <span class="whitespace-nowrap">Load More Movies</span>
+            </button>
+        </div>
+    </main>
+
+    <!-- Back to Top Button -->
+    <button id="backToTopBtn" class="back-to-top fixed bottom-6 right-6 bg-primary text-white w-12 h-12 rounded-full shadow-lg flex items-center justify-center z-50 hover:bg-primary/90 transition-colors">
+        <div class="w-6 h-6 flex items-center justify-center">
+            <i class="ri-arrow-up-line"></i>
+        </div>
+    </button>
+
+    <!-- Movie Preview Modal -->
+    <div id="previewModal" class="modal fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm" id="modalOverlay"></div>
+        <div class="relative bg-white rounded-xl shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+            <button id="closeModalBtn" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 z-10">
+                <div class="w-6 h-6 flex items-center justify-center">
+                    <i class="ri-close-line"></i>
+                </div>
+            </button>
+            
+            <div class="flex flex-col md:flex-row">
+                <div class="md:w-2/5">
+                    <img id="modalImage" src="https://readdy.ai/api/search-image?query=movie%20poster%20for%20sci-fi%20film%20with%20futuristic%20cityscape%2C%20neon%20lights%2C%20dramatic%20lighting%2C%20professional%20cinematic%20quality%2C%20high%20resolution%20movie%20poster%2C%20vibrant%20colors%2C%20dramatic%20composition&width=500&height=750&seq=1&orientation=portrait" alt="Movie Poster" class="w-full h-full object-cover object-top rounded-t-xl md:rounded-l-xl md:rounded-tr-none">
+                </div>
+                
+                <div class="md:w-3/5 p-6">
+                    <div class="mb-4">
+                        <h2 id="modalTitle" class="text-2xl font-bold text-gray-900 mb-1">Quantum Horizon</h2>
+                        <div class="flex items-center mb-4">
+                            <div class="flex items-center mr-4">
+                                <div class="w-5 h-5 flex items-center justify-center text-yellow-400">
+                                    <i class="ri-star-fill"></i>
+                                </div>
+                                <span id="modalRating" class="text-sm font-medium ml-1">4.8</span>
+                            </div>
+                            <span id="modalYear" class="text-sm text-gray-500 mr-4">2025</span>
+                            <span id="modalGenre" class="text-sm text-gray-500">Sci-Fi</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Overview</h3>
+                        <p id="modalOverview" class="text-gray-700">In the year 2150, as humanity expands its reach across the stars, a team of scientists discovers a mysterious quantum anomaly that threatens to unravel the fabric of reality. Dr. Elena Reyes, a brilliant physicist with a troubled past, must race against time to understand and contain the phenomenon before it consumes everything in its path. As the boundaries between dimensions blur, Elena confronts not only the scientific challenge of a lifetime but also the ghosts of her own history.</p>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Cast</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-700">Sophia Martinez</span>
+                            <span class="px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-700">Daniel Chen</span>
+                            <span class="px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-700">Olivia Washington</span>
+                            <span class="px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-700">James Patel</span>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <button class="w-full bg-primary text-white font-medium py-3 rounded-full hover:bg-primary/90 transition-colors !rounded-button">
+                            <span class="whitespace-nowrap">See Full Details</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
